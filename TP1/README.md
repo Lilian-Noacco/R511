@@ -572,13 +572,3 @@ p {
 
 **Après modifications :**  
 Relancez le script `run_flask.sh` pour voir les changements reflétés dans votre application web.
-
----
-
-## Conclusion
-
-Ce TP vous a permis de vous familiariser avec les concepts de base de Docker, la gestion des images et des conteneurs, ainsi que l'utilisation de Docker Compose pour orchestrer des services interconnectés. Vous avez également appris à créer et publier vos propres images Docker sur un registry privé, ainsi qu'à automatiser le déploiement de conteneurs avec des scripts Bash.
-
-N'hésitez pas à explorer davantage les fonctionnalités avancées de Docker et Docker Compose pour optimiser vos environnements de développement et de déploiement.
-
----

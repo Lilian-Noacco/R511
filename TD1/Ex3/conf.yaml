@@ -1,0 +1,39 @@
+# Virtual Router Configuration
+
+router:
+  name: "VirtualRouter01"
+
+interfaces:
+  - name: "GigabitEthernet0/0"
+    ip_address: "192.168.1.1"
+    subnet_mask: "255.255.255.0"
+    mac_address: "00:1A:2B:3C:4D:5E"
+
+  - name: "GigabitEthernet0/1"
+    ip_address: "10.0.0.1"
+    subnet_mask: "255.255.255.0"
+    mac_address: "00:1A:2B:3C:4D:5F"
+
+routing_protocols:
+  ospf:
+    process_id: 1
+    router_id: "1.1.1.1"
+    networks:
+      - network: "192.168.1.0"
+        wildcard_mask: "0.0.0.255"
+        area: 0
+      - network: "10.0.0.0"
+        wildcard_mask: "0.0.0.255"
+        area: 0
+
+  bgp:
+    as_number: 65001
+    router_id: "1.1.1.1"
+    neighbors:
+      - neighbor_ip: "192.168.1.2"
+        remote_as: 65002
+      - neighbor_ip: "10.0.0.2"
+        remote_as: 65003
+    networks:
+      - "192.168.1.0/24"
+      - "10.0.0.0/24"

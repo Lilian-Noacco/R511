@@ -1,0 +1,15 @@
+name: Jean Dupont
+age: 35 years
+address:
+    number: 123
+    street: Rue de la Paix
+    city: Paris
+    country: France
+preferred programming languages:
+  - Python
+  - Java
+  - Ruby
+hobbies:
+  - food
+  - porn
+  - weed
