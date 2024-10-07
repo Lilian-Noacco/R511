@@ -337,6 +337,7 @@ RUN apt-get update
 RUN apt-get install -y apache2 vim
 RUN mkdir -p /home/backup
 COPY myfile /home/backup/
+CMD ["apachectl", "-D", "FOREGROUND"]
 ```
 **Commandes :**
 ```bash
