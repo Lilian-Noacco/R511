@@ -1,0 +1,42 @@
+- name: Playbook pour le module file
+  hosts: all
+  become: yes
+  tasks:
+    - name: a. Créer un répertoire
+      file:
+        path: /home/lima.linux/R511/TD2/Ex3/tmp/mon_dossier
+        state: directory
+
+    - name: b. Créer un répertoire avec propriétaire root
+      file:
+        path: /home/lima.linux/R511/TD2/Ex3/tmp/mon_dossier_root
+        state: directory
+        owner: root
+
+    - name: c. Modifier le groupe et les droits
+      file:
+        path: /home/lima.linux/R511/TD2/Ex3/tmp/mon_dossier_root
+        group: root
+        mode: '0755'
+
+    - name: d. Créer les répertoires 1/2/3/4
+      file:
+        path: /home/lima.linux/R511/TD2/Ex3/tmp/1/2/3/4
+        state: directory
+        recurse: yes
+
+    - name: e. Créer un fichier dans le répertoire 4
+      file:
+        path: /home/lima.linux/R511/TD2/Ex3/tmp/1/2/3/4/fichier.txt
+        state: touch
+
+    - name: f. Créer un lien symbolique vers le répertoire 4
+      file:
+        src: /home/lima.linux/R511/TD2/Ex3/tmp/1/2/3/4
+        dest: /home/lima.linux/R511/TD2/Ex3/tmp/symlink
+        state: link
+
+    - name: g. Supprimer le fichier créé précédemment
+      file:
+        path: /home/lima.linux/R511/TD2/Ex3/tmp/1/2/3/4/fichier.txt
+        state: absent
