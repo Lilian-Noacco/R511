@@ -1,0 +1,40 @@
+---
+all:
+  children:
+    common:
+      vars:
+        var1: "Ici c'est le groupe common"
+      children:
+        webserver:
+          vars:
+            var1: "Ici c'est le groupe des serveurs web"
+          hosts:
+            node2:
+              ansible_host: 127.0.0.1
+            node3:
+              ansible_host: 127.0.0.1
+        dbserver:
+          vars:
+            var1: "Ici c'est le groupe des serveurs de base de données"
+          hosts:
+            node4:
+              ansible_host: 127.0.0.1
+            node5:
+              ansible_host: 127.0.0.1
+              var1: "Ici c'est le node 5"
+        appdocker:
+          hosts:
+            node6:
+              ansible_host: 127.0.0.1
+            node7:
+              ansible_host: 127.0.0.1
+    nocommon:
+      vars:
+        var1: "Ici c'est le groupe nocommon"
+      hosts:
+        node8:
+          ansible_host: 127.0.0.1
+        node9:
+          ansible_host: 127.0.0.1
+        node10:
+          ansible_host: 127.0.0.1
