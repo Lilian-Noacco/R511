@@ -1,0 +1,116 @@
+Bien sûr ! Voici comment vous pouvez créer une machine virtuelle Vagrant qui exécute un conteneur Docker avec Nginx.
+
+### Étape 1 : Installer Vagrant et VirtualBox
+
+Assurez-vous que **Vagrant** et **VirtualBox** sont installés sur votre machine Windows.
+
+- **Vagrant** : [Télécharger Vagrant](https://www.vagrantup.com/downloads)
+- **VirtualBox** : [Télécharger VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+
+### Étape 2 : Créer un répertoire pour votre projet Vagrant
+
+Ouvrez une invite de commande et créez un nouveau dossier pour votre projet :
+
+```bash
+mkdir vagrant-docker-nginx
+cd vagrant-docker-nginx
+```
+
+### Étape 3 : Créer le fichier Vagrantfile
+
+Dans ce dossier, créez un fichier nommé `Vagrantfile` avec le contenu suivant :
+
+```ruby
+Vagrant.configure("2") do |config|
+  # Utiliser une box Ubuntu
+  config.vm.box = "ubuntu/focal64"
+
+  # Transférer le port 8080 de l'hôte vers le port 80 de la VM
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Provisionner la VM pour installer Docker et exécuter Nginx
+  config.vm.provision "shell", inline: <<-SHELL
+    # Mettre à jour les paquets
+    sudo apt-get update
+
+    # Installer les prérequis
+    sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+    # Ajouter la clé GPG officielle de Docker
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+    # Ajouter le dépôt Docker
+    sudo add-apt-repository \
+       "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+       $(lsb_release -cs) \
+       stable"
+
+    # Mettre à jour les paquets à nouveau
+    sudo apt-get update
+
+    # Installer Docker CE
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+    # Ajouter l'utilisateur vagrant au groupe docker
+    sudo usermod -aG docker vagrant
+
+    # Exécuter le conteneur Nginx
+    sudo docker run -d -p 80:80 nginx
+  SHELL
+end
+```
+
+### Explication du Vagrantfile
+
+- **config.vm.box** : Spécifie l'image de base Ubuntu 20.04.
+- **config.vm.network** : Transfère le port 80 de la VM au port 8080 de l'hôte pour accéder à Nginx depuis Windows.
+- **config.vm.provision** : Exécute un script shell pour installer Docker et lancer le conteneur Nginx.
+
+### Étape 4 : Démarrer la machine virtuelle Vagrant
+
+Dans le même répertoire, exécutez la commande :
+
+```bash
+vagrant up
+```
+
+Cela téléchargera l'image Ubuntu, créera la VM, installera Docker et exécutera Nginx dans un conteneur Docker.
+
+### Étape 5 : Accéder à Nginx depuis votre machine Windows
+
+Ouvrez un navigateur web sur votre machine Windows et accédez à l'URL :
+
+```
+http://localhost:8080
+```
+
+Vous devriez voir la page d'accueil par défaut de Nginx.
+
+### Étape 6 : Gérer la machine virtuelle
+
+- **Se connecter à la VM** :
+
+  ```bash
+  vagrant ssh
+  ```
+
+- **Arrêter la VM** :
+
+  ```bash
+  vagrant halt
+  ```
+
+- **Détruire la VM** :
+
+  ```bash
+  vagrant destroy
+  ```
+
+### Remarques supplémentaires
+
+- **Permissions Docker** : Nous ajoutons l'utilisateur `vagrant` au groupe `docker` pour exécuter Docker sans sudo.
+- **Persistence des données** : Si vous avez besoin de conserver les données, pensez à monter des volumes ou à utiliser des mécanismes de stockage appropriés.
+
+### Conclusion
+
+Vous avez maintenant une VM Vagrant qui exécute un conteneur Docker avec Nginx. N'hésitez pas à personnaliser le `Vagrantfile` pour répondre à vos besoins spécifiques.
