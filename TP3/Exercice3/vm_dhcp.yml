@@ -1,0 +1,35 @@
+---
+- name: Configurer le serveur DHCP
+  hosts: dhcp-server
+  become: yes
+
+  tasks:
+    - name: Mettre à jour la liste des paquets
+      apt:
+        update_cache: yes
+        cache_valid_time: 600
+
+    - name: Installer le serveur DHCP
+      apt:
+        name: isc-dhcp-server
+        state: present
+
+    - name: Copier le fichier de configuration DHCP
+      copy:
+        src: "{{ dhcp_conf }}"
+        dest: /etc/dhcp/dhcpd.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Configurer l'interface pour le serveur DHCP
+      lineinfile:
+        path: /etc/default/isc-dhcp-server
+        regexp: '^INTERFACESv4='
+        line: 'INTERFACESv4="enp0s8"'
+
+    - name: Redémarrer le service DHCP
+      service:
+        name: isc-dhcp-server
+        state: restarted
+        enabled: yes

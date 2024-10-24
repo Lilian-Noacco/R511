@@ -5,14 +5,14 @@
 
     - name: S'assurer que le répertoire /tmp/1/2/3/4 existe
       file:
-        path: /home/lima.linux/R511/TD2/Ex4/tmp/1/2/3/4
+        path: /home/user/IdeaProjects/R511/TD2/Ex4/tmp/1/2/3/4
         state: directory
         mode: '0755'
 
     - name: Copier les fichiers f1, f2, f3 vers /tmp/1/2/3/4
       copy:
         src: "{{ item }}"
-        dest: /home/lima.linux/R511/TD2/Ex4/tmp/1/2/3/4/
+        dest: /home/user/IdeaProjects/R511/TD2/Ex4/tmp/1/2/3/4/
       with_items:
         - f1
         - f2
@@ -21,11 +21,11 @@
     - name: Copier les fichiers g1 à g6 vers /tmp en les renommant en 'old'
       copy:
         src: "g{{ item }}"
-        dest: /home/lima.linux/R511/TD2/Ex4/tmp/g{{ item }}.old
+        dest: /home/user/IdeaProjects/R511/TD2/Ex4/tmp/g{{ item }}.old
       with_sequence: start=1 end=6
 
     - name: Copier les fichiers g1 à g6 vers /tmp en les renommant en 'x_{i*2}'
       copy:
         src: "g{{ item }}"
-        dest: "/home/lima.linux/R511/TD2/Ex4/tmp/x_{{ item|int * 2 }}"
+        dest: "/home/user/IdeaProjects/R511/TD2/Ex4/tmp/x_{{ item|int * 2 }}"
       with_sequence: start=1 end=6

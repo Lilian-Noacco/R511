@@ -1,0 +1,39 @@
+Vagrant.configure("2") do |config|
+  # Configuration de la VM 'web-server'
+  config.vm.define "web-server" do |web|
+    web.vm.box = "ubuntu/focal64"
+    
+    # Configuration du réseau privé avec une IP valide
+    web.vm.network "private_network", ip: "192.168.56.10"
+
+    # Nom de la machine
+    web.vm.hostname = "web-server"
+
+    # Configuration du provider
+    web.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+    end
+
+    # Provisionnement avec le script install_apache.sh
+    web.vm.provision "shell", path: "scripts/install_apache.sh"
+  end
+
+  # Configuration de la VM 'db-server'
+  config.vm.define "db-server" do |db|
+    db.vm.box = "ubuntu/focal64"
+
+    # Configuration du réseau privé avec une IP valide
+    db.vm.network "private_network", ip: "192.168.56.11"
+    
+    # Nom de la machine
+    db.vm.hostname = "db-server"
+    
+    # Configuration du provider
+    db.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+    end
+    
+    # Provisionnement avec le script install_mysql.sh
+    db.vm.provision "shell", path: "scripts/install_mysql.sh"
+  end
+end

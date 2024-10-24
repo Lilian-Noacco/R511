@@ -1,0 +1,41 @@
+Vagrant.configure("2") do |config|
+  # Configuration de la VM 'dhcp-server'
+  config.vm.define "dhcp-server" do |dhcp_server|
+    dhcp_server.vm.box = "ubuntu/focal64"
+
+    # Configuration du réseau privé
+    dhcp_server.vm.network "private_network", ip: "192.168.56.10"
+
+    # Nom de la machine
+    dhcp_server.vm.hostname = "dhcp-server"
+
+    # Configuration du provider
+    dhcp_server.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+    end
+
+    # Provisionnement avec Ansible
+    dhcp_server.vm.provision "ansible" do |ansible|
+      ansible.playbook = "vm_dhcp.yml"
+      ansible.extra_vars = {
+        dhcp_conf: "ansi_dhcpd.conf"
+      }
+    end
+  end
+
+  # Configuration de la VM 'dhcp-client'
+  config.vm.define "dhcp-client" do |dhcp_client|
+    dhcp_client.vm.box = "ubuntu/focal64"
+
+    # Configuration du réseau privé pour obtenir une IP via DHCP
+    dhcp_client.vm.network "private_network", type: "dhcp"
+
+    # Nom de la machine
+    dhcp_client.vm.hostname = "dhcp-client"
+
+    # Configuration du provider
+    dhcp_client.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+    end
+  end
+end
